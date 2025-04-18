@@ -1,0 +1,58 @@
+version: '3.8'
+services:
+  api-gateway:
+    build: ./api-gateway
+    ports:
+      - "3000:3000"
+    depends_on:
+      - menu-service
+      - order-service
+      - payment-service
+      - inventory-service
+      - customer-service
+
+  menu-service:
+    build: ./menu-services
+    ports:
+      - "3003:3003"
+    environment:
+      - MONGO_URL=mongodb://mongodb:27017/cafe
+
+  order-service:
+    build: ./order-services
+    ports:
+      - "3004:3004"
+    environment:
+      - MONGO_URL=mongodb://mongodb:27017/cafe
+
+  payment-service:
+    build: ./payment-services
+    ports:
+      - "3005:3005"
+    environment:
+      - MONGO_URL=mongodb://mongodb:27017/cafe
+
+  inventory-service:
+    build: ./inventory-services
+    ports:
+      - "3002:3002"
+    environment:
+      - MONGO_URL=mongodb://mongodb:27017/cafe
+
+  customer-service:
+    build: ./customer-services
+    ports:
+      - "3001:3001"
+    environment:
+      - MONGO_URL=mongodb://mongodb:27017/cafe
+
+  mongodb:
+    image: mongo:5.0
+    container_name: mongodb
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+
+volumes:
+  mongo-data:
